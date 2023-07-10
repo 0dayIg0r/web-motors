@@ -6,4 +6,4 @@ function New() {
   )
 }
 
-export default New
+export  {New}

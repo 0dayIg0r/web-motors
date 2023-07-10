@@ -6,4 +6,4 @@ function CarDetail() {
   )
 }
 
-export default CarDetail
+export {CarDetail}
