@@ -1,5 +1,11 @@
+import { Container } from "../../components/container";
+
 function Home() {
-  return <div>Home</div>;
+  return (
+    <Container>
+      <h1>f</h1>
+    </Container>
+  )
 }
 
 export { Home };
