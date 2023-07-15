@@ -70,6 +70,10 @@ function Login() {
           Acessar
         </button>
        </form>
+
+       <Link to='/register'>
+        Não possui uma conta? <b className='text-red-600'>Cadastre-se</b>
+       </Link>
       </div>
     </Container>
   )
