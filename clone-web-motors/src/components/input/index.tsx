@@ -18,7 +18,7 @@ function Input({name, placeholder, type, register, error, rules}: InputProps) {
         {...register(name, rules)}
         id={name}
          />
-         {error && <p>{error}</p>}
+         {error && <p className="text-red-600">{error}</p>}
     </div>
   )
 }
