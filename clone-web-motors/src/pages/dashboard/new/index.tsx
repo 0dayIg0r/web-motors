@@ -13,13 +13,14 @@ import { Input } from "../../../components/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthContext } from "../../../contexts/AuthContext";
-import { storage } from "../../../serevices/firebaseConnection";
+import { storage, db } from "../../../serevices/firebaseConnection";
 import {
   ref,
   uploadBytes,
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+import { addDoc, collection } from "firebase/firestore";
 import { v4 as uuidV4 } from "uuid";
 
 const schema = z.object({
@@ -52,7 +53,7 @@ function New() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }, reset
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -60,8 +61,43 @@ function New() {
 
   const [carImages, setCarImages] = useState<ImageItemProps[]>([])
 
-  function onSubmit(data: FormData) {
-    console.log(data);
+  function onSubmit(data: FormData ) {
+
+    if(carImages.length === 0){
+      alert('Envie no mínimo uma imagem')
+      return
+    }
+
+     const carListImages = carImages.map(car =>{
+      return {
+        uid: car.uid,
+        name: car.name,
+        url: car.url
+      }
+     })
+
+     addDoc(collection(db, 'cars'), {
+      name: data.name,
+      model: data.model,
+      whatsapp: data.whatsapp,
+      city: data.city,
+      km: data.km,
+      price: data.price,
+      description: data.description,
+      created: new Date(),
+      owner: user?.name,
+      uid: user?.uid,
+      images: carImages
+     })
+     .then(() =>{
+      reset()
+      setCarImages([])
+      console.log('Cadastrou')
+     })
+     .catch((e: any)=>{
+      console.log(e.message)
+     })
+
   }
 
   async function handleFile(e: ChangeEvent<HTMLInputElement>) {
