@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoImg from "../../assets/logo.svg";
 import { Container } from "../../components/container";
@@ -8,6 +8,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { auth } from "../../serevices/firebaseConnection";
 import { createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
+import { AuthContext } from "../../contexts/AuthContext";
+
 
 const schema = z.object({
   name: z.string().nonempty("Digite seu nome"),
@@ -25,6 +27,8 @@ type FormData = z.infer<typeof schema>;
 
 function Register() {
   const navigate = useNavigate()
+  const {handleInfouser} = useContext(AuthContext)
+
   const {
     register,
     handleSubmit,
@@ -43,9 +47,15 @@ function Register() {
 
  async function onSubmit(data: FormData) {
     createUserWithEmailAndPassword(auth, data.email, data.password)
+
     .then(async (user)=>{
       await updateProfile(user.user, {
         displayName: data.name
+      })
+      handleInfouser({
+        name: data.name,
+        email: data.email,
+        uid: user.uid
       })
       navigate('/dashboard', {replace: true})
     })
