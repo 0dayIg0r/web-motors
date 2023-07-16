@@ -1,8 +1,13 @@
+import { Container } from "../../components/container"
+import DashboardHeader from "../../components/painelheader"
+
 
 
 function Dashboard() {
   return (
-    <div>Dashboard</div>
+    <Container>
+      <DashboardHeader/>
+    </Container>
   )
 }
 
