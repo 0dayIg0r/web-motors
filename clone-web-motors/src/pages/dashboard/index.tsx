@@ -67,21 +67,24 @@ function Dashboard() {
   }, [user]);
 
   async function handleDeleteCar(car: CarProps) {
-    const docRef = doc(db, "cars", car.id);
+
+    const itemCar = car
+  
+    const docRef = doc(db, "cars", itemCar.id);
     await deleteDoc(docRef);
 
     // DELETAR TODAS AS IMGS RELACIONADAS AO POST
-    car.images.map(async (image) =>{
+    itemCar.images.map(async (image) =>{
       const imagePath = `images/${image.uid}/${image.name}`
       const imageRef = ref(storage, imagePath)
 
       try {
         await deleteObject(imageRef)
+        setCars(cars.filter((car) => car.id !== itemCar.id));
       } catch (e:any) {
         console.log(e.message)
       }
     })
-    setCars(cars.filter((car) => car.id !== car.id));
   }
 
   return (
@@ -90,7 +93,7 @@ function Dashboard() {
 
       <main className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {cars.map((car) => (
-          <section className="w-full bg-white rounded-lg relative" key={car.id}>
+          <section className="w-full bg-white rounded-lg relative mt-4" key={car.id}>
             <button
               onClick={() => handleDeleteCar(car)}
               className="absolute bg-white w-14 h-14 rounded-full flex items-center justify-center right-2 top-2 drop-shadow-sm "
