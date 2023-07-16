@@ -17,7 +17,7 @@ interface UserProps {
     email: string | null
 }
 
-export const AuthContex = createContext({ } as AuthContextData)
+export const AuthContext = createContext({ } as AuthContextData)
 
 function AuthProvider({children}: AuthProviderProps){
     const [ user, setUser] = useState<UserProps | null>(null)
@@ -44,13 +44,13 @@ function AuthProvider({children}: AuthProviderProps){
     },[])
 
     return(
-        <AuthContex.Provider 
+        <AuthContext.Provider 
         value={{
             signed: !!user,
             loadingAuth, 
         }}>
             {children}
-        </AuthContex.Provider>
+        </AuthContext.Provider>
     )
 
 }
