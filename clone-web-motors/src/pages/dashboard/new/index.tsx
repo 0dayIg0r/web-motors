@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/await-thenable */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import { ChangeEvent, useState, useContext } from "react";
 import { Container } from "../../../components/container";
 import DashboardHeader from "../../../components/painelheader";
-import { FiUpload } from "react-icons/fi";
+import { FiTrash, FiUpload } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { Input } from "../../../components/input";
 import { z } from "zod";
@@ -34,8 +40,15 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
+interface ImageItemProps {
+  uid: string,
+  name: string,
+  previewUrl: string,
+  url: string
+}
 function New() {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext); 
+
   const {
     register,
     handleSubmit,
@@ -44,6 +57,8 @@ function New() {
     resolver: zodResolver(schema),
     mode: "onChange",
   });
+
+  const [carImages, setCarImages] = useState<ImageItemProps[]>([])
 
   function onSubmit(data: FormData) {
     console.log(data);
@@ -75,9 +90,29 @@ function New() {
 
     uploadBytes(uploadRef, image).then((snapshop) => {
       getDownloadURL(snapshop.ref).then((downloadUrl) => {
-        console.log(downloadUrl);
+        const imageItem = {
+          name: uidImage,
+          uid: currentUid,
+          previewUrl: URL.createObjectURL(image),
+          url: downloadUrl,
+        }
+        setCarImages((images) => [...images, imageItem])
       });
     });
+  }
+
+  async function handleDeleteImage(item: ImageItemProps){
+    const imagePath = `images/${item.uid}/${item.name}`
+  
+    const imageRef = ref(storage, imagePath)
+    try {
+      await deleteObject(imageRef)
+      setCarImages(carImages.filter((car) => car.url !== item.url))
+      
+    } catch (e:any) {
+      console.log(e.message)
+    }
+
   }
   return (
     <Container>
@@ -97,6 +132,19 @@ function New() {
             />
           </div>
         </button>
+
+        {carImages.map((item) =>(
+          <div key={item.name} className="w-full h-32 flex justify-center relative items-center">
+            <button className="absolute" onClick={() => handleDeleteImage(item)}>
+              <FiTrash size={30} color='#fff'/>
+            </button>
+            <img 
+            className="rounded-lg w-full h-32 object-cover"
+            src={item.previewUrl}
+             alt='imagem do carro'
+              /> 
+          </div>
+        ))}
       </div>
 
       <div className="w-full bg-white p-3 rounded-lg flex flex-col sm:flex-row items-center gap-2 mt-2">
