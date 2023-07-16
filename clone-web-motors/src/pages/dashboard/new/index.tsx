@@ -79,6 +79,7 @@ function New() {
      addDoc(collection(db, 'cars'), {
       name: data.name,
       model: data.model,
+      year: data.year,
       whatsapp: data.whatsapp,
       city: data.city,
       km: data.km,
