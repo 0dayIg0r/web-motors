@@ -145,7 +145,7 @@ function CarDetail() {
           <p>{car?.whatsapp}</p>
 
           <a
-            href={`https://wa.me/${car?.whatsapp}`}
+            href={`https://api.whatsapp.com/send?phone=${car?.whatsapp}&text=Olá vi esse ${car.name} e quero saber mais.`}
             target='_blank'
             className='bg-green-500 w-full text-white flex items-center justify-center gap-2 my-6 h-11 text-xl rounded-lg font-medium cursor-pointer'
           >
