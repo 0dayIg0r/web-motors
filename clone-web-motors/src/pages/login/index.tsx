@@ -9,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../serevices/firebaseConnection";
 
+import toast from 'react-hot-toast'
+
 const schema = z.object({
   email: z
     .string()
@@ -39,11 +41,12 @@ function Login() {
 
   function onSubmit(data: FormData) {
     signInWithEmailAndPassword(auth, data.email, data.password)
-      .then(() => {
+    .then(() => {
+      toast.success('Entrando')
         navigate("/dashboard", { replace: true });
       })
       .catch((e: any) => {
-        console.log(e.message);
+        toast.error('Login ou senha incorretos')
       });
   }
 

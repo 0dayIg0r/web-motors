@@ -13,10 +13,18 @@ import 'swiper/css/navigation'
 import 'swiper/css/scrollbar'
 import 'swiper/css/pagination'
 
+import { Toaster } from "react-hot-toast";
+
+
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    <Toaster
+      position="top-right"
+      reverseOrder={false}
+    />
     <AuthProvider>
-      <RouterProvider router={router} /> 
+      <RouterProvider router={router} />
     </AuthProvider>
   </React.StrictMode>
 );

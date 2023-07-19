@@ -23,6 +23,7 @@ import {
 import { addDoc, collection } from "firebase/firestore";
 import { v4 as uuidV4 } from "uuid";
 
+import toast from 'react-hot-toast'
 const schema = z.object({
   name: z.string().nonempty("Digite seu nome"),
   model: z.string().nonempty("Digite o modelo do carro"),
@@ -62,21 +63,21 @@ function New() {
   const [carImages, setCarImages] = useState<ImageItemProps[]>([])
 
   function onSubmit(data: FormData ) {
-
+    
     if(carImages.length === 0){
-      alert('Envie no mínimo uma imagem')
+      toast.error('Selecione pelo menos uma imagem do veículo')
       return
     }
 
-     const carListImages = carImages.map(car =>{
+    const carListImages = carImages.map(car =>{
       return {
         uid: car.uid,
         name: car.name,
         url: car.url
       }
-     })
+    })
 
-     addDoc(collection(db, 'cars'), {
+    addDoc(collection(db, 'cars'), {
       name: data.name.toUpperCase(),
       model: data.model,
       year: data.year,
@@ -89,8 +90,9 @@ function New() {
       owner: user?.name,
       uid: user?.uid,
       images: carImages
-     })
-     .then(() =>{
+    })
+    .then(() =>{
+      toast.success('Seu veículo está publicado')
       reset()
       setCarImages([])
       console.log('Cadastrou')
@@ -104,7 +106,7 @@ function New() {
   async function handleFile(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
       const image = e.target.files[0];
-      console.log(image);
+      
 
       if (image.type === "image/jpeg" || image.type === "image/png") {
         await handleUpload(image);
@@ -134,6 +136,7 @@ function New() {
           url: downloadUrl,
         }
         setCarImages((images) => [...images, imageItem])
+        toast.success('Imagem enviada')
       });
     });
   }

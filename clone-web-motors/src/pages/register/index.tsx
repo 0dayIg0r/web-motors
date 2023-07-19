@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { auth } from "../../serevices/firebaseConnection";
 import { createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
 import { AuthContext } from "../../contexts/AuthContext";
-
+import toast from 'react-hot-toast'
 
 const schema = z.object({
   name: z.string().nonempty("Digite seu nome"),
@@ -57,6 +57,7 @@ function Register() {
         email: data.email,
         uid: user.uid
       })
+      toast.success('Sua conta foi criada, faça o login')
       navigate('/dashboard', {replace: true})
     })
     .catch((e: any) =>{
