@@ -130,7 +130,7 @@ function CarDetail() {
           </div>
 
         <strong>Descrição:</strong>
-        <p className='mb-4'>{car?.description}</p>
+        <p className='mb-4 break-words'>{car?.description}</p>
 
         <strong>Telefone/Whatsapp</strong>
         <p>{car?.whatsapp}</p>
@@ -150,3 +150,5 @@ function CarDetail() {
 }
 
 export { CarDetail }
+
+// AULA 94
