@@ -14,7 +14,7 @@ interface CarProps {
   year: string;
   uid: string;
   model: string;
-  price: string | number;
+  price:  string;
   description: string
   city: string;
   km: string;
@@ -113,7 +113,10 @@ function CarDetail() {
         <main className='w-full bg-white rounded-lg p-6 my-4'>
           <div className='flex flex-col sm:flex-row mb-4 items-center justify-between'>
             <h1 className='font-bold text-3xl text-black'>{car?.name}</h1>
-            <h1 className='font-bold text-3xl text-black'> R$ {car?.price}</h1>
+            <h1 className='font-bold text-3xl text-black'> {Number(car?.price).toLocaleString('pt-BR',{
+              style: 'currency',
+              currency: 'BRL'
+            })}</h1>
           </div>
           <p>{car?.model}</p>
 
@@ -133,7 +136,7 @@ function CarDetail() {
             <div className='flex flex-col gap-4'>
               <div>
                 <p>KM</p>
-                <strong>{car?.km}</strong>
+                <strong>{Number(car?.km).toLocaleString('pt-BR',)}</strong>
               </div>
             </div>
           </div>

@@ -20,9 +20,9 @@ interface CarProps {
   name: string;
   year: string;
   uid: string;
-  price: string | number;
+  price:  number;
   city: string;
-  km: string;
+  km: number;
   images: CarImageProps[];
 }
 
@@ -107,10 +107,13 @@ function Dashboard() {
             <p className="font-bold">{car.name}</p>
             <div className="flex flex-col px-2">
               <span className="text-zinc-700">
-                Ano {car.year} | {car.km} km
+                Ano {car.year} | {Number(car.km).toLocaleString('pt-BR')} km
               </span>
               <strong className="text-black font-bold mt-4">
-                R$ {car.price}
+                {Number(car.price).toLocaleString('pt-BR',{
+                  style: 'currency',
+                  currency: 'BRL'
+                })}
               </strong>
             </div>
 

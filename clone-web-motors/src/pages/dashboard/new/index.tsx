@@ -24,12 +24,13 @@ import { addDoc, collection } from "firebase/firestore";
 import { v4 as uuidV4 } from "uuid";
 
 import toast from 'react-hot-toast'
+
 const schema = z.object({
   name: z.string().nonempty("Digite seu nome"),
   model: z.string().nonempty("Digite o modelo do carro"),
   year: z.string().nonempty("Digite o ano do carro"),
   km: z.string().nonempty("Digite a quilometragem"),
-  price: z.string().nonempty("Digite o valor do carro"),
+  price: z.string().nonempty('Digite o valor do veíuclo'),
   city: z.string().nonempty("Digite o nome da cidade"),
   whatsapp: z
     .string()
@@ -47,9 +48,12 @@ interface ImageItemProps {
   name: string,
   previewUrl: string,
   url: string
+  
 }
 function New() {
   const { user } = useContext(AuthContext); 
+
+  
 
   const {
     register,
@@ -76,7 +80,7 @@ function New() {
         url: car.url
       }
     })
-
+    
     addDoc(collection(db, 'cars'), {
       name: data.name.toUpperCase(),
       model: data.model,
@@ -95,7 +99,6 @@ function New() {
       toast.success('Seu veículo está publicado')
       reset()
       setCarImages([])
-      console.log('Cadastrou')
      })
      .catch((e: any)=>{
       console.log(e.message)
@@ -110,6 +113,7 @@ function New() {
 
       if (image.type === "image/jpeg" || image.type === "image/png") {
         await handleUpload(image);
+       
       } else {
         alert("O arquivo tem que ser em JPEG ou PNG");
         return;
@@ -137,7 +141,12 @@ function New() {
         }
         setCarImages((images) => [...images, imageItem])
         toast.success('Imagem enviada')
+        
       });
+
+      if(!handleUpload){
+        setCarImages()
+      }
     });
   }
 
